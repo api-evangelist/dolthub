@@ -1,0 +1,83 @@
+aid: dolthub
+name: DoltHub
+review:
+  question: Does DoltHub expose a documented public WebSocket or streaming API?
+  answer: false
+  date: '2026-06-20'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. The DoltHub v1alpha1 HTTP API is
+    request/response REST only. Long-running write, fork, and merge calls are
+    asynchronous but are modeled as submit-then-poll over plain HTTPS GET
+    (operationName polling) - there is no Server-Sent Events stream and no
+    WebSocket surface, so there is no event-driven channel to model in
+    AsyncAPI.
+findings:
+  summary: |
+    DoltHub does not publish a documented public WebSocket or SSE API. The
+    DoltHub SQL API is REST over HTTPS under
+    https://www.dolthub.com/api/v1alpha1. Read queries are synchronous GET
+    requests; write, fork, and merge operations are asynchronous but use a
+    submit (returns operation_name) then poll-until-done pattern over ordinary
+    HTTPS GET requests, not streaming. The open-source Dolt database
+    additionally ships a MySQL-compatible SQL server (dolt sql-server) that
+    speaks the MySQL wire protocol over TCP, but that is a self-hosted database
+    server, not a DoltHub-hosted WebSocket/SSE web API.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://www.dolthub.com/api/v1alpha1
+      documented: true
+    - protocol: SSE
+      scheme: https
+      documented: false
+      note: No Server-Sent Events streaming endpoint is documented; async operations use poll-until-done GET requests.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented for the DoltHub API.
+    - protocol: MySQL Wire Protocol
+      scheme: tcp
+      documented: true
+      note: Provided by the self-hosted open-source Dolt SQL server (dolt sql-server), not by the DoltHub hosted HTTP API.
+  endpointsConfirmedRest:
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}/{ref}?q=...
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}?q=...
+    - POST https://www.dolthub.com/api/v1alpha1/{owner}/{database}/write/{fromBranch}/{toBranch}?q=...
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}/write?operationName=...
+    - POST https://www.dolthub.com/api/v1alpha1/database
+    - POST https://www.dolthub.com/api/v1alpha1/fork
+    - GET  https://www.dolthub.com/api/v1alpha1/fork?operationName=...
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}/forks
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}/branches
+    - POST https://www.dolthub.com/api/v1alpha1/{owner}/{database}/branches
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}/tags
+    - POST https://www.dolthub.com/api/v1alpha1/{owner}/{database}/tags
+    - POST https://www.dolthub.com/api/v1alpha1/{owner}/{database}/pulls
+    - POST https://www.dolthub.com/api/v1alpha1/{owner}/{database}/pulls/{pullId}/comments
+    - POST https://www.dolthub.com/api/v1alpha1/{owner}/{database}/pulls/{pullId}/merge
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}/pulls/{pullId}/merge?operationName=...
+    - GET  https://www.dolthub.com/api/v1alpha1/{owner}/{database}/jobs
+    - GET  https://www.dolthub.com/api/v1alpha1/users/{username}/operations
+sources:
+  - url: https://docs.dolthub.com/products/dolthub/api/sql
+    type: Documentation
+    note: SQL read query endpoint over HTTPS GET with q parameter; JSON response with schema and rows.
+  - url: https://www.dolthub.com/blog/2022-01-12-sql-api-writes/
+    type: Documentation
+    note: Write API is asynchronous - POST returns operation_name, polled via GET write?operationName until done; no streaming.
+  - url: https://www.dolthub.com/blog/2023-02-24-introducing-the-new-dolthub-api/
+    type: Documentation
+    note: Database, fork, pull request, and merge management endpoints; merges are submit-then-poll, not streamed.
+  - url: https://docs.dolthub.com/products/dolthub/api/authentication
+    type: Documentation
+    note: Auth is an authorization header of the form 'token YOUR_API_TOKEN'; no WebSocket auth handshake documented.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or SSE protocol surface exists. The DoltHub API is REST with a
+    submit-then-poll pattern for long-running operations, so no AsyncAPI
+    document was authored. apis.yml references only OpenAPI, Postman, and
+    GitHub artifacts.

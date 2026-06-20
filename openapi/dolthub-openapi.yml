@@ -1,0 +1,696 @@
+openapi: 3.0.1
+info:
+  title: DoltHub API
+  description: >-
+    The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database
+    "Git for data". Provides read SQL queries, asynchronous write SQL queries,
+    and version-control management of databases, branches, tags, forks, jobs,
+    and operations on Dolt databases hosted at dolthub.com. Read queries against
+    public databases are unauthenticated; write queries and access to private
+    databases require an API token sent as an authorization header.
+  termsOfService: https://www.dolthub.com/terms
+  contact:
+    name: DoltHub Support
+    url: https://www.dolthub.com/contact
+  version: v1alpha1
+servers:
+  - url: https://www.dolthub.com/api/v1alpha1
+security:
+  - tokenAuth: []
+  - {}
+paths:
+  /{owner}/{database}/{ref}:
+    get:
+      operationId: executeReadQuery
+      tags:
+        - SQL
+      summary: Execute a read SQL query
+      description: >-
+        Executes a read-only SQL query (passed in the `q` query parameter)
+        against the given database at the given branch/ref and returns the
+        schema and result rows as JSON.
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Database owner name (e.g. dolthub).
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Database (repository) name (e.g. ip-to-country).
+        - name: ref
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Branch name, ref, or commit to query.
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The SQL query to execute (e.g. SELECT * FROM states).
+      responses:
+        '200':
+          description: Query result with schema and rows.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+  /{owner}/{database}:
+    get:
+      operationId: executeReadQueryDefaultBranch
+      tags:
+        - SQL
+      summary: Execute a read SQL query against the default branch
+      description: >-
+        Same as the read query endpoint but omits the branch/ref segment and
+        runs the query against the database default branch.
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Database owner name.
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Database (repository) name.
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The SQL query to execute.
+      responses:
+        '200':
+          description: Query result with schema and rows.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+  /{owner}/{database}/write/{fromBranch}/{toBranch}:
+    post:
+      operationId: executeWriteQuery
+      tags:
+        - SQL
+      summary: Execute an asynchronous write SQL query
+      description: >-
+        Executes an INSERT / UPDATE / DELETE query (passed in `q`) against
+        `toBranch`, which is created from `fromBranch` if it does not exist. An
+        empty query merges `fromBranch` into `toBranch`. Returns an
+        `operation_name` to poll. Requires authentication.
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fromBranch
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Source branch the destination branch is based on.
+        - name: toBranch
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Destination branch the write is committed to.
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+          description: The write SQL query. An empty value merges fromBranch into toBranch.
+      responses:
+        '200':
+          description: Asynchronous operation accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOperationResponse'
+  /{owner}/{database}/write:
+    get:
+      operationId: pollWriteOperation
+      tags:
+        - SQL
+      summary: Poll the status of a write operation
+      description: >-
+        Polls the status of a previously submitted write operation using the
+        `operationName` returned by the write endpoint. Poll until `done` is
+        true.
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: operationName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Operation name returned by the write endpoint.
+      responses:
+        '200':
+          description: Operation status, including commit IDs when done.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteStatusResponse'
+  /database:
+    post:
+      operationId: createDatabase
+      tags:
+        - Databases
+      summary: Create a database
+      description: Creates a new Dolt database (repository) owned by the given owner.
+      security:
+        - tokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseRequest'
+      responses:
+        '200':
+          description: Database created.
+  /fork:
+    post:
+      operationId: forkDatabase
+      tags:
+        - Databases
+      summary: Fork a database
+      description: >-
+        Forks a parent database into a new owner namespace. Asynchronous;
+        returns an operation name to poll via GET /fork.
+      security:
+        - tokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForkDatabaseRequest'
+      responses:
+        '200':
+          description: Fork operation accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOperationResponse'
+    get:
+      operationId: pollForkOperation
+      tags:
+        - Databases
+      summary: Poll the status of a fork operation
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: operationName
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Fork operation status.
+  /{owner}/{database}/forks:
+    get:
+      operationId: listForks
+      tags:
+        - Databases
+      summary: List forks of a database
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of forks in the network.
+  /{owner}/{database}/branches:
+    get:
+      operationId: listBranches
+      tags:
+        - Branches
+      summary: List branches
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of branches.
+    post:
+      operationId: createBranch
+      tags:
+        - Branches
+      summary: Create a branch
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBranchRequest'
+      responses:
+        '200':
+          description: Branch created.
+  /{owner}/{database}/tags:
+    get:
+      operationId: listTags
+      tags:
+        - Tags
+      summary: List tags
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of tags.
+    post:
+      operationId: createTag
+      tags:
+        - Tags
+      summary: Create a tag
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagRequest'
+      responses:
+        '200':
+          description: Tag created.
+  /{owner}/{database}/pulls:
+    post:
+      operationId: createPullRequest
+      tags:
+        - Pull Requests
+      summary: Create a pull request
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePullRequest'
+      responses:
+        '200':
+          description: Pull request created.
+  /{owner}/{database}/pulls/{pullId}/comments:
+    post:
+      operationId: addPullRequestComment
+      tags:
+        - Pull Requests
+      summary: Add a comment to a pull request
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pullId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+              required:
+                - comment
+      responses:
+        '200':
+          description: Comment added.
+  /{owner}/{database}/pulls/{pullId}/merge:
+    post:
+      operationId: mergePullRequest
+      tags:
+        - Pull Requests
+      summary: Merge a pull request
+      description: Initiates an asynchronous merge of a pull request.
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pullId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Merge operation accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOperationResponse'
+    get:
+      operationId: pollMergePullRequest
+      tags:
+        - Pull Requests
+      summary: Poll the status of a pull request merge
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pullId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: operationName
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Merge operation status.
+  /{owner}/{database}/jobs:
+    get:
+      operationId: listJobs
+      tags:
+        - Jobs
+      summary: List jobs for a database
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of jobs.
+  /users/{username}/operations:
+    get:
+      operationId: listOperations
+      tags:
+        - Operations
+      summary: List operations created by a user
+      security:
+        - tokenAuth: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: operationType
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - SqlWrite
+              - SqlRead
+              - Import
+              - Merge
+              - Migrate
+        - name: pageToken
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of operations.
+components:
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: authorization
+      description: >-
+        DoltHub API token sent as the `authorization` header in the form
+        "token YOUR_API_TOKEN". Required for write queries and access to
+        private databases.
+  schemas:
+    QueryResponse:
+      type: object
+      properties:
+        query_execution_status:
+          type: string
+        query_execution_message:
+          type: string
+        repository_owner:
+          type: string
+        repository_name:
+          type: string
+        commit_ref:
+          type: string
+        sql_query:
+          type: string
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              columnName:
+                type: string
+              columnType:
+                type: string
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
+    WriteStatusResponse:
+      type: object
+      properties:
+        done:
+          type: boolean
+        res_details:
+          type: object
+          properties:
+            from_commit_id:
+              type: string
+            to_commit_id:
+              type: string
+    CreateDatabaseRequest:
+      type: object
+      properties:
+        ownerName:
+          type: string
+        repoName:
+          type: string
+        visibility:
+          type: string
+          enum:
+            - public
+            - private
+        description:
+          type: string
+      required:
+        - ownerName
+        - repoName
+        - visibility
+    ForkDatabaseRequest:
+      type: object
+      properties:
+        parentOwnerName:
+          type: string
+        parentDatabaseName:
+          type: string
+        ownerName:
+          type: string
+      required:
+        - parentOwnerName
+        - parentDatabaseName
+        - ownerName
+    CreateBranchRequest:
+      type: object
+      properties:
+        revisionType:
+          type: string
+          enum:
+            - branch
+            - ref
+            - commit
+        revisionName:
+          type: string
+        newBranchName:
+          type: string
+      required:
+        - revisionType
+        - revisionName
+        - newBranchName
+    CreateTagRequest:
+      type: object
+      properties:
+        tagName:
+          type: string
+        tagMessage:
+          type: string
+        revisionType:
+          type: string
+          enum:
+            - branch
+            - ref
+            - commit
+        revisionName:
+          type: string
+      required:
+        - tagName
+        - tagMessage
+        - revisionType
+        - revisionName
+    CreatePullRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        fromBranchOwnerName:
+          type: string
+        fromBranchRepoName:
+          type: string
+        fromBranchName:
+          type: string
+        toBranchOwnerName:
+          type: string
+        toBranchRepoName:
+          type: string
+        toBranchName:
+          type: string
+      required:
+        - title
+        - fromBranchOwnerName
+        - fromBranchRepoName
+        - fromBranchName
+        - toBranchOwnerName
+        - toBranchRepoName
+        - toBranchName

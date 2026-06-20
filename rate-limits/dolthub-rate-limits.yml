@@ -1,0 +1,59 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: DoltHub
+providerId: dolthub
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Database
+- SQL
+- Version Control
+- Git for Data
+- MySQL
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  DoltHub does not publish explicit numeric rate limits for its v1alpha1 HTTP
+  API. Read SQL queries run synchronously against hosted databases; write SQL
+  queries, forks, and merges are asynchronous and execute as jobs/operations
+  that are queued server-side, which naturally bounds concurrency rather than
+  exposing a documented per-minute quota. Specific limits are not reconciled in
+  this artifact.
+notes: >-
+  No documented RPM/RPS values were found on the DoltHub API or pricing pages
+  as of the creation date. Asynchronous write/fork/merge operations should be
+  polled (not tight-looped) until done; honor any standard HTTP throttling
+  responses. Verify limits with DoltHub support on reconciliation.
+sources:
+- https://docs.dolthub.com/products/dolthub/api/sql
+- https://docs.dolthub.com/products/dolthub/api/database
+- https://www.dolthub.com/blog/2022-01-12-sql-api-writes/
+responseCodes:
+  throttled: 429
+limits:
+- name: Read SQL Query
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Synchronous read queries; no documented numeric limit.
+- name: Write SQL Query
+  scope: account
+  metric: operations
+  limit: queued asynchronously
+  notes: Executes as an async operation/job; poll until done rather than retrying tightly.
+- name: Jobs / Operations
+  scope: account
+  metric: jobs
+  limit: queued asynchronously
+  notes: Write, fork, merge, import, and migrate run as queued jobs/operations.
+policies:
+- name: Asynchronous Execution
+  description: Write, fork, and merge calls return an operation_name; poll the corresponding status endpoint until done is true.
+- name: Backoff Strategy
+  description: Clients should poll with reasonable intervals and implement exponential backoff with jitter, honoring Retry-After if returned.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

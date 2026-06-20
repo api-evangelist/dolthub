@@ -1,0 +1,205 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DoltHub API",
+    "version": "v1alpha1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "authorization",
+      "value": "token {{apiToken}}",
+      "in": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SQL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute a read SQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/{ref}?q=SELECT * FROM table LIMIT 10"
+          },
+          "docs": "Executes a read-only SQL query against the given owner/database/branch and returns schema and rows."
+        },
+        {
+          "info": {
+            "name": "Execute a write SQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/write/{fromBranch}/{toBranch}?q=INSERT INTO table (id) VALUES (1)"
+          },
+          "docs": "Executes an INSERT/UPDATE/DELETE against toBranch (created from fromBranch if missing). Returns operation_name to poll. Requires auth."
+        },
+        {
+          "info": {
+            "name": "Poll a write operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/write?operationName={operationName}"
+          },
+          "docs": "Polls a write operation status until done is true."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Databases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/database",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"ownerName\": \"dolthub\",\n  \"repoName\": \"my-database\",\n  \"visibility\": \"public\",\n  \"description\": \"My new database\"\n}"
+            }
+          },
+          "docs": "Creates a new Dolt database (repository)."
+        },
+        {
+          "info": {
+            "name": "Fork a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/fork",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"parentOwnerName\": \"dolthub\",\n  \"parentDatabaseName\": \"ip-to-country\",\n  \"ownerName\": \"my-user\"\n}"
+            }
+          },
+          "docs": "Forks a parent database into a new owner namespace. Returns operation name to poll."
+        },
+        {
+          "info": {
+            "name": "List forks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/forks"
+          },
+          "docs": "Lists all forks of a database in the network."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Branches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List branches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/branches"
+          },
+          "docs": "Lists the branches of a database."
+        },
+        {
+          "info": {
+            "name": "Create a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/branches",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"revisionType\": \"branch\",\n  \"revisionName\": \"main\",\n  \"newBranchName\": \"feature\"\n}"
+            }
+          },
+          "docs": "Creates a new branch from a revision."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tags",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/tags"
+          },
+          "docs": "Lists the tags of a database."
+        },
+        {
+          "info": {
+            "name": "Create a tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/tags",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"tagName\": \"v1\",\n  \"tagMessage\": \"First release\",\n  \"revisionType\": \"branch\",\n  \"revisionName\": \"main\"\n}"
+            }
+          },
+          "docs": "Creates a tag pointing at a revision."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Jobs and Operations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/{owner}/{database}/jobs"
+          },
+          "docs": "Lists all jobs for a database."
+        },
+        {
+          "info": {
+            "name": "List operations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/users/{username}/operations?operationType=SqlWrite"
+          },
+          "docs": "Lists all operations created by a user, optionally filtered by operationType."
+        }
+      ]
+    }
+  ]
+}

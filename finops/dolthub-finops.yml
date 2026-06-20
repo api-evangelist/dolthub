@@ -1,0 +1,87 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: DoltHub
+providerId: dolthub
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: true
+tags:
+- Database
+- SQL
+- Version Control
+- Git for Data
+- MySQL
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of DoltHub spend. Public databases and the read SQL API are free.
+  Cost is driven entirely by private data storage under DoltHub Pro: the first
+  100 MB of private data is free, a flat $5/month applies above 100 MB up to
+  5 GB, and storage over 5 GB is billed at $1/GB/month. The HTTP API is not
+  separately metered per request.
+notes: >-
+  Storage-tier pricing reflects the 2026-04-24 DoltHub Pro relaunch; verify
+  against the DoltHub pricing page during reconciliation.
+sources:
+- https://www.dolthub.com/pricing
+- https://www.dolthub.com/blog/2026-04-24-announcing-dolthub-pro-for-5-dollars-per-month/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: DoltHub
+serviceCategory: Databases
+billingModel:
+  pricingCategory: Subscription-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: DoltHub
+  ServiceCategory: Databases
+  ProviderName: DoltHub
+  PublisherName: DoltHub
+  InvoiceIssuerName: DoltHub
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Subscription-Based
+meters:
+- name: private_storage_base
+  description: Flat $5/month for private data above 100 MB and up to 5 GB.
+  unit: months
+  aggregation: sum
+  dimensions:
+  - account
+- name: private_storage_overage
+  description: Private data storage above 5 GB, billed at $1/GB/month.
+  unit: gigabytes
+  aggregation: max
+  dimensions:
+  - account
+  - database
+- name: public_database_hosting
+  description: Public database hosting and read SQL API, provided free of charge.
+  unit: databases
+  aggregation: count
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Track total private data size per database; the 100 MB and 5 GB thresholds determine which tier applies.
+- name: Allocation
+  description: Map private databases to owners/teams; public databases carry no cost.
+- name: Optimization
+  description: Keep non-sensitive datasets public (free); prune history and large blobs to stay under the 5 GB flat-rate threshold.
+- name: Accountability
+  description: Assign an owner per private database; review private storage growth monthly against the $5 base and $1/GB overage.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

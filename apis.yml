@@ -1,0 +1,128 @@
+aid: dolthub
+url: https://raw.githubusercontent.com/api-evangelist/dolthub/refs/heads/main/apis.yml
+name: DoltHub
+kind: company
+description: DoltHub is the hosting platform for Dolt, the version-controlled SQL
+  database - "Git for data". DoltHub hosts public and private Dolt databases and
+  exposes an HTTP API (the DoltHub SQL API) for running read and write SQL queries
+  against any branch, plus repository, branch, tag, fork, and asynchronous
+  job/operation management over a Git-style version-controlled MySQL-compatible
+  database.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Database
+- SQL
+- Version Control
+- Git for Data
+- MySQL
+created: '2026-06-20'
+modified: '2026-06-20'
+specificationVersion: '0.19'
+apis:
+- aid: dolthub:dolthub-sql-query-api
+  name: DoltHub SQL Query API
+  tags:
+  - SQL
+  - Query
+  - Read
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.dolthub.com/products/dolthub/api/sql
+  baseURL: https://www.dolthub.com/api/v1alpha1
+  properties:
+  - url: https://docs.dolthub.com/products/dolthub/api/sql
+    type: Documentation
+  - url: https://docs.dolthub.com/products/dolthub/api/sql
+    type: APIReference
+  - url: openapi/dolthub-openapi.yml
+    type: OpenAPI
+  - url: collections/dolthub.postman_collection.json
+    type: Postman
+  - url: https://github.com/dolthub/dolt
+    type: GitHub
+  description: Read-only SQL query endpoint that executes a SELECT (or other
+    read) query against any owner/database/branch on DoltHub and returns a JSON
+    response containing the schema, rows, and query execution status.
+- aid: dolthub:dolthub-write-api
+  name: DoltHub Write API
+  tags:
+  - SQL
+  - Write
+  - Async
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.dolthub.com/products/dolthub/api/sql
+  baseURL: https://www.dolthub.com/api/v1alpha1
+  properties:
+  - url: https://docs.dolthub.com/products/dolthub/api/sql
+    type: Documentation
+  - url: https://www.dolthub.com/blog/2022-01-12-sql-api-writes/
+    type: APIReference
+  - url: openapi/dolthub-openapi.yml
+    type: OpenAPI
+  - url: collections/dolthub.postman_collection.json
+    type: Postman
+  - url: https://github.com/dolthub/dolt
+    type: GitHub
+  description: Asynchronous write endpoint that executes INSERT / UPDATE / DELETE
+    SQL against a destination branch (created from a source branch if missing) and
+    returns an operation name to poll for completion and the resulting commit IDs.
+    Requires a Bearer / token authorization header.
+- aid: dolthub:dolthub-repositories-branches-api
+  name: DoltHub Repositories and Branches API
+  tags:
+  - Repositories
+  - Branches
+  - Tags
+  - Forks
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.dolthub.com/products/dolthub/api/database
+  baseURL: https://www.dolthub.com/api/v1alpha1
+  properties:
+  - url: https://docs.dolthub.com/products/dolthub/api/database
+    type: Documentation
+  - url: https://www.dolthub.com/blog/2023-02-24-introducing-the-new-dolthub-api/
+    type: APIReference
+  - url: openapi/dolthub-openapi.yml
+    type: OpenAPI
+  - url: collections/dolthub.postman_collection.json
+    type: Postman
+  - url: https://github.com/dolthub/dolt
+    type: GitHub
+  description: Version-control management endpoints for creating databases,
+    forking databases, listing forks, creating and listing branches and tags, and
+    polling asynchronous jobs and operations on a Dolt database.
+- aid: dolthub:dolt-sql-server
+  name: Dolt SQL Server
+  tags:
+  - Dolt
+  - MySQL
+  - SQL Server
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.dolthub.com/sql-reference/server/sql-server
+  baseURL: https://github.com/dolthub/dolt
+  properties:
+  - url: https://docs.dolthub.com/sql-reference/server/sql-server
+    type: Documentation
+  - url: https://github.com/dolthub/dolt
+    type: GitHub
+  description: The open-source Dolt database ships a MySQL-compatible SQL server
+    (dolt sql-server) over the MySQL wire protocol, giving the same versioned
+    database hosted on DoltHub a self-hostable, drop-in SQL interface for any
+    MySQL client or driver.
+common:
+- type: GitHubOrganization
+  url: https://github.com/dolthub
+- type: LinkedIn
+  url: https://www.linkedin.com/company/dolthub
+- type: Website
+  url: https://www.dolthub.com
+- type: Documentation
+  url: https://docs.dolthub.com
+- type: Plans
+  url: plans/dolthub-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/dolthub-rate-limits.yml
+- type: FinOps
+  url: finops/dolthub-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,108 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: DoltHub
+providerId: dolthub
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: true
+tags:
+- Database
+- SQL
+- Version Control
+- Git for Data
+- MySQL
+- Plans
+description: >-
+  DoltHub hosts public Dolt databases free of charge, including free access to
+  the read SQL API. A DoltHub Pro subscription unlocks private databases and
+  the write API: the first 100 MB of private data is free, a flat $5/month
+  applies once private data exceeds 100 MB and holds until 5 GB, and storage
+  above 5 GB is billed at $1/GB/month. The API itself is not separately
+  metered; cost is driven by private storage tier.
+notes: >-
+  Pricing reflects the 2026-04-24 DoltHub Pro relaunch at $5/month (a 10x
+  reduction from the prior $50/month plan). Verify current numbers on the
+  DoltHub pricing page.
+sources:
+- https://www.dolthub.com/pricing
+- https://www.dolthub.com/blog/2026-04-24-announcing-dolthub-pro-for-5-dollars-per-month/
+plans:
+- id: dolthub-free
+  name: Free
+  type: free
+  description: >-
+    Host and discover unlimited public Dolt databases at no charge, with full
+    use of the read SQL API against public databases.
+  entries:
+  - label: Public Databases
+    name: public_databases
+    type: free
+    metric: databases
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0
+    userMultiplied: false
+  - label: Read SQL API (public)
+    name: read_api_public
+    type: free
+    metric: requests
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0
+    userMultiplied: false
+  elements:
+  - name: Public Database Hosting
+  - name: Read SQL Query API
+  - name: Branches and Tags
+  - name: Forks and Pull Requests
+- id: dolthub-pro
+  name: Pro
+  type: paid
+  description: >-
+    Private databases plus the write SQL API. First 100 MB of private data is
+    free; a flat $5/month applies above 100 MB and up to 5 GB; storage over
+    5 GB is billed per GB.
+  entries:
+  - label: Pro Base (private data over 100 MB, up to 5 GB)
+    name: pro_base
+    type: flat
+    metric: storage
+    limit: 5
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $5 per month
+    userMultiplied: false
+  - label: Included Free Private Storage
+    name: free_private_storage
+    type: free
+    metric: storage
+    limit: 0.1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 (first 100 MB)
+    userMultiplied: false
+  - label: Private Storage Overage (above 5 GB)
+    name: storage_overage
+    type: usage
+    metric: storage
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $1 per GB per month
+    userMultiplied: false
+  elements:
+  - name: Private Database Hosting
+  - name: Write SQL API
+  - name: Read SQL Query API (private)
+  - name: Branches, Tags, Forks, Pull Requests
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

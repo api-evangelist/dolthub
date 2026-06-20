@@ -1,0 +1,386 @@
+{
+  "item": [
+    {
+      "id": "ad1f6e10-1a2b-4c3d-9e4f-1a2b3c4d5e6f",
+      "name": "SQL",
+      "description": {
+        "content": "Read and write SQL queries against DoltHub-hosted databases.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b1c2d3e4-0001-4a2b-8c3d-111111111111",
+          "name": "Execute a read SQL query",
+          "request": {
+            "name": "Execute a read SQL query",
+            "description": {
+              "content": "Executes a read-only SQL query against the given owner/database/branch and returns schema and rows.",
+              "type": "text/plain"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/:ref?q=SELECT * FROM table LIMIT 10",
+              "path": ["api", "v1alpha1", ":owner", ":database", ":ref"],
+              "host": ["{{baseUrl}}"],
+              "query": [
+                { "key": "q", "value": "SELECT * FROM table LIMIT 10" }
+              ],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "ip-to-country" },
+                { "key": "ref", "value": "main" }
+              ]
+            },
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "b1c2d3e4-0002-4a2b-8c3d-222222222222",
+          "name": "Execute a write SQL query",
+          "request": {
+            "name": "Execute a write SQL query",
+            "description": {
+              "content": "Executes an INSERT/UPDATE/DELETE against toBranch (created from fromBranch if missing). Returns operation_name to poll. Requires auth.",
+              "type": "text/plain"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/write/:fromBranch/:toBranch?q=INSERT INTO table (id) VALUES (1)",
+              "path": ["api", "v1alpha1", ":owner", ":database", "write", ":fromBranch", ":toBranch"],
+              "host": ["{{baseUrl}}"],
+              "query": [
+                { "key": "q", "value": "INSERT INTO table (id) VALUES (1)" }
+              ],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "my-database" },
+                { "key": "fromBranch", "value": "main" },
+                { "key": "toBranch", "value": "feature" }
+              ]
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "b1c2d3e4-0003-4a2b-8c3d-333333333333",
+          "name": "Poll a write operation",
+          "request": {
+            "name": "Poll a write operation",
+            "description": {
+              "content": "Polls a write operation status until done is true.",
+              "type": "text/plain"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/write?operationName=operations/{{operationId}}",
+              "path": ["api", "v1alpha1", ":owner", ":database", "write"],
+              "host": ["{{baseUrl}}"],
+              "query": [
+                { "key": "operationName", "value": "operations/{{operationId}}" }
+              ],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "my-database" }
+              ]
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "ad1f6e10-2b3c-4d5e-9f6a-2b3c4d5e6f7a",
+      "name": "Databases",
+      "description": {
+        "content": "Create, fork, and list Dolt databases.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c1d2e3f4-0001-4a2b-8c3d-111111111111",
+          "name": "Create a database",
+          "request": {
+            "name": "Create a database",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/database",
+              "path": ["api", "v1alpha1", "database"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ownerName\": \"dolthub\",\n  \"repoName\": \"my-database\",\n  \"visibility\": \"public\",\n  \"description\": \"My new database\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "c1d2e3f4-0002-4a2b-8c3d-222222222222",
+          "name": "Fork a database",
+          "request": {
+            "name": "Fork a database",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/fork",
+              "path": ["api", "v1alpha1", "fork"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parentOwnerName\": \"dolthub\",\n  \"parentDatabaseName\": \"ip-to-country\",\n  \"ownerName\": \"my-user\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "c1d2e3f4-0003-4a2b-8c3d-333333333333",
+          "name": "List forks",
+          "request": {
+            "name": "List forks",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/forks",
+              "path": ["api", "v1alpha1", ":owner", ":database", "forks"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "ip-to-country" }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "ad1f6e10-3c4d-5e6f-9a7b-3c4d5e6f7a8b",
+      "name": "Branches",
+      "description": {
+        "content": "Create and list branches.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d1e2f3a4-0001-4a2b-8c3d-111111111111",
+          "name": "List branches",
+          "request": {
+            "name": "List branches",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/branches",
+              "path": ["api", "v1alpha1", ":owner", ":database", "branches"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "ip-to-country" }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "d1e2f3a4-0002-4a2b-8c3d-222222222222",
+          "name": "Create a branch",
+          "request": {
+            "name": "Create a branch",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/branches",
+              "path": ["api", "v1alpha1", ":owner", ":database", "branches"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "my-database" }
+              ]
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"revisionType\": \"branch\",\n  \"revisionName\": \"main\",\n  \"newBranchName\": \"feature\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "ad1f6e10-4d5e-6f7a-9b8c-4d5e6f7a8b9c",
+      "name": "Tags",
+      "description": {
+        "content": "Create and list tags.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e1f2a3b4-0001-4a2b-8c3d-111111111111",
+          "name": "List tags",
+          "request": {
+            "name": "List tags",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/tags",
+              "path": ["api", "v1alpha1", ":owner", ":database", "tags"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "ip-to-country" }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "e1f2a3b4-0002-4a2b-8c3d-222222222222",
+          "name": "Create a tag",
+          "request": {
+            "name": "Create a tag",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/tags",
+              "path": ["api", "v1alpha1", ":owner", ":database", "tags"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "my-database" }
+              ]
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tagName\": \"v1\",\n  \"tagMessage\": \"First release\",\n  \"revisionType\": \"branch\",\n  \"revisionName\": \"main\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "ad1f6e10-5e6f-7a8b-9c9d-5e6f7a8b9cad",
+      "name": "Jobs and Operations",
+      "description": {
+        "content": "List asynchronous jobs and operations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f1a2b3c4-0001-4a2b-8c3d-111111111111",
+          "name": "List jobs",
+          "request": {
+            "name": "List jobs",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/:owner/:database/jobs",
+              "path": ["api", "v1alpha1", ":owner", ":database", "jobs"],
+              "host": ["{{baseUrl}}"],
+              "query": [],
+              "variable": [
+                { "key": "owner", "value": "dolthub" },
+                { "key": "database", "value": "my-database" }
+              ]
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "f1a2b3c4-0002-4a2b-8c3d-222222222222",
+          "name": "List operations",
+          "request": {
+            "name": "List operations",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1alpha1/users/:username/operations?operationType=SqlWrite",
+              "path": ["api", "v1alpha1", "users", ":username", "operations"],
+              "host": ["{{baseUrl}}"],
+              "query": [
+                { "key": "operationType", "value": "SqlWrite" }
+              ],
+              "variable": [
+                { "key": "username", "value": "my-user" }
+              ]
+            },
+            "header": [
+              { "key": "authorization", "value": "token {{apiToken}}" }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [],
+  "variable": [
+    { "type": "string", "value": "https://www.dolthub.com", "key": "baseUrl" },
+    { "type": "string", "value": "YOUR_API_TOKEN", "key": "apiToken" }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "authorization" },
+      { "key": "value", "value": "token {{apiToken}}" },
+      { "key": "in", "value": "header" }
+    ]
+  },
+  "info": {
+    "_postman_id": "9b8c7d6e-5f4a-4b3c-8d2e-1f0a9b8c7d6e",
+    "name": "DoltHub API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database 'Git for data'.\n\nContact Support:\n Name: DoltHub Support\n URL: https://www.dolthub.com/contact",
+      "type": "text/plain"
+    }
+  }
+}
