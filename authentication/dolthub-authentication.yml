@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/dolthub-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: tokenAuth
+  type: apiKey
+  in: header
+  parameter: authorization
+  description: DoltHub API token sent as the `authorization` header in the form "token YOUR_API_TOKEN".
+    Required for write queries and access to private databases.
+  sources:
+  - openapi/dolthub-openapi.yml
