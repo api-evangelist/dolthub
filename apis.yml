@@ -109,6 +109,8 @@ apis:
     database hosted on DoltHub a self-hostable, drop-in SQL interface for any
     MySQL client or driver.
 common:
+- type: AgenticAccess
+  url: agentic-access/dolthub-agentic-access.yml
 - type: DomainSecurity
   url: security/dolthub-domain-security.yml
 - type: Authentication
