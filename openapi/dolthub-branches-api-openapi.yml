@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: DoltHub Branches API
+  description: The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database "Git for data". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.
+  termsOfService: https://www.dolthub.com/terms
+  contact:
+    name: DoltHub Support
+    url: https://www.dolthub.com/contact
+  version: v1alpha1
+servers:
+- url: https://www.dolthub.com/api/v1alpha1
+security:
+- tokenAuth: []
+- {}
+tags:
+- name: Branches
+paths:
+  /{owner}/{database}/branches:
+    get:
+      operationId: listBranches
+      tags:
+      - Branches
+      summary: List branches
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of branches.
+    post:
+      operationId: createBranch
+      tags:
+      - Branches
+      summary: Create a branch
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBranchRequest'
+      responses:
+        '200':
+          description: Branch created.
+components:
+  schemas:
+    CreateBranchRequest:
+      type: object
+      properties:
+        revisionType:
+          type: string
+          enum:
+          - branch
+          - ref
+          - commit
+        revisionName:
+          type: string
+        newBranchName:
+          type: string
+      required:
+      - revisionType
+      - revisionName
+      - newBranchName
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: authorization
+      description: DoltHub API token sent as the `authorization` header in the form "token YOUR_API_TOKEN". Required for write queries and access to private databases.

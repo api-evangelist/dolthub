@@ -1,0 +1,221 @@
+openapi: 3.0.1
+info:
+  title: DoltHub Branches SQL API
+  description: The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database "Git for data". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.
+  termsOfService: https://www.dolthub.com/terms
+  contact:
+    name: DoltHub Support
+    url: https://www.dolthub.com/contact
+  version: v1alpha1
+servers:
+- url: https://www.dolthub.com/api/v1alpha1
+security:
+- tokenAuth: []
+- {}
+tags:
+- name: SQL
+paths:
+  /{owner}/{database}/{ref}:
+    get:
+      operationId: executeReadQuery
+      tags:
+      - SQL
+      summary: Execute a read SQL query
+      description: Executes a read-only SQL query (passed in the `q` query parameter) against the given database at the given branch/ref and returns the schema and result rows as JSON.
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Database owner name (e.g. dolthub).
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Database (repository) name (e.g. ip-to-country).
+      - name: ref
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Branch name, ref, or commit to query.
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The SQL query to execute (e.g. SELECT * FROM states).
+      responses:
+        '200':
+          description: Query result with schema and rows.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+  /{owner}/{database}:
+    get:
+      operationId: executeReadQueryDefaultBranch
+      tags:
+      - SQL
+      summary: Execute a read SQL query against the default branch
+      description: Same as the read query endpoint but omits the branch/ref segment and runs the query against the database default branch.
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Database owner name.
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Database (repository) name.
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The SQL query to execute.
+      responses:
+        '200':
+          description: Query result with schema and rows.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+  /{owner}/{database}/write/{fromBranch}/{toBranch}:
+    post:
+      operationId: executeWriteQuery
+      tags:
+      - SQL
+      summary: Execute an asynchronous write SQL query
+      description: Executes an INSERT / UPDATE / DELETE query (passed in `q`) against `toBranch`, which is created from `fromBranch` if it does not exist. An empty query merges `fromBranch` into `toBranch`. Returns an `operation_name` to poll. Requires authentication.
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fromBranch
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Source branch the destination branch is based on.
+      - name: toBranch
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Destination branch the write is committed to.
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The write SQL query. An empty value merges fromBranch into toBranch.
+      responses:
+        '200':
+          description: Asynchronous operation accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOperationResponse'
+  /{owner}/{database}/write:
+    get:
+      operationId: pollWriteOperation
+      tags:
+      - SQL
+      summary: Poll the status of a write operation
+      description: Polls the status of a previously submitted write operation using the `operationName` returned by the write endpoint. Poll until `done` is true.
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: operationName
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Operation name returned by the write endpoint.
+      responses:
+        '200':
+          description: Operation status, including commit IDs when done.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteStatusResponse'
+components:
+  schemas:
+    WriteStatusResponse:
+      type: object
+      properties:
+        done:
+          type: boolean
+        res_details:
+          type: object
+          properties:
+            from_commit_id:
+              type: string
+            to_commit_id:
+              type: string
+    QueryResponse:
+      type: object
+      properties:
+        query_execution_status:
+          type: string
+        query_execution_message:
+          type: string
+        repository_owner:
+          type: string
+        repository_name:
+          type: string
+        commit_ref:
+          type: string
+        sql_query:
+          type: string
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              columnName:
+                type: string
+              columnType:
+                type: string
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: authorization
+      description: DoltHub API token sent as the `authorization` header in the form "token YOUR_API_TOKEN". Required for write queries and access to private databases.

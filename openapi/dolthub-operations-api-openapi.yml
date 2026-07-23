@@ -1,0 +1,57 @@
+openapi: 3.0.1
+info:
+  title: DoltHub Branches Operations API
+  description: The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database "Git for data". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.
+  termsOfService: https://www.dolthub.com/terms
+  contact:
+    name: DoltHub Support
+    url: https://www.dolthub.com/contact
+  version: v1alpha1
+servers:
+- url: https://www.dolthub.com/api/v1alpha1
+security:
+- tokenAuth: []
+- {}
+tags:
+- name: Operations
+paths:
+  /users/{username}/operations:
+    get:
+      operationId: listOperations
+      tags:
+      - Operations
+      summary: List operations created by a user
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: operationType
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - SqlWrite
+          - SqlRead
+          - Import
+          - Merge
+          - Migrate
+      - name: pageToken
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of operations.
+components:
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: authorization
+      description: DoltHub API token sent as the `authorization` header in the form "token YOUR_API_TOKEN". Required for write queries and access to private databases.

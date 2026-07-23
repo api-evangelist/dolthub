@@ -1,0 +1,137 @@
+openapi: 3.0.1
+info:
+  title: DoltHub Branches Databases API
+  description: The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database "Git for data". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.
+  termsOfService: https://www.dolthub.com/terms
+  contact:
+    name: DoltHub Support
+    url: https://www.dolthub.com/contact
+  version: v1alpha1
+servers:
+- url: https://www.dolthub.com/api/v1alpha1
+security:
+- tokenAuth: []
+- {}
+tags:
+- name: Databases
+paths:
+  /database:
+    post:
+      operationId: createDatabase
+      tags:
+      - Databases
+      summary: Create a database
+      description: Creates a new Dolt database (repository) owned by the given owner.
+      security:
+      - tokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseRequest'
+      responses:
+        '200':
+          description: Database created.
+  /fork:
+    post:
+      operationId: forkDatabase
+      tags:
+      - Databases
+      summary: Fork a database
+      description: Forks a parent database into a new owner namespace. Asynchronous; returns an operation name to poll via GET /fork.
+      security:
+      - tokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForkDatabaseRequest'
+      responses:
+        '200':
+          description: Fork operation accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOperationResponse'
+    get:
+      operationId: pollForkOperation
+      tags:
+      - Databases
+      summary: Poll the status of a fork operation
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: operationName
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Fork operation status.
+  /{owner}/{database}/forks:
+    get:
+      operationId: listForks
+      tags:
+      - Databases
+      summary: List forks of a database
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of forks in the network.
+components:
+  schemas:
+    ForkDatabaseRequest:
+      type: object
+      properties:
+        parentOwnerName:
+          type: string
+        parentDatabaseName:
+          type: string
+        ownerName:
+          type: string
+      required:
+      - parentOwnerName
+      - parentDatabaseName
+      - ownerName
+    CreateDatabaseRequest:
+      type: object
+      properties:
+        ownerName:
+          type: string
+        repoName:
+          type: string
+        visibility:
+          type: string
+          enum:
+          - public
+          - private
+        description:
+          type: string
+      required:
+      - ownerName
+      - repoName
+      - visibility
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: authorization
+      description: DoltHub API token sent as the `authorization` header in the form "token YOUR_API_TOKEN". Required for write queries and access to private databases.

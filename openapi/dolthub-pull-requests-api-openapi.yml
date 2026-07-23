@@ -1,0 +1,186 @@
+openapi: 3.0.1
+info:
+  title: DoltHub Branches Pull Requests API
+  description: The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database "Git for data". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.
+  termsOfService: https://www.dolthub.com/terms
+  contact:
+    name: DoltHub Support
+    url: https://www.dolthub.com/contact
+  version: v1alpha1
+servers:
+- url: https://www.dolthub.com/api/v1alpha1
+security:
+- tokenAuth: []
+- {}
+tags:
+- name: Pull Requests
+paths:
+  /{owner}/{database}/pulls:
+    post:
+      operationId: createPullRequest
+      tags:
+      - Pull Requests
+      summary: Create a pull request
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePullRequest'
+      responses:
+        '200':
+          description: Pull request created.
+  /{owner}/{database}/pulls/{pullId}/comments:
+    post:
+      operationId: addPullRequestComment
+      tags:
+      - Pull Requests
+      summary: Add a comment to a pull request
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pullId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+              required:
+              - comment
+      responses:
+        '200':
+          description: Comment added.
+  /{owner}/{database}/pulls/{pullId}/merge:
+    post:
+      operationId: mergePullRequest
+      tags:
+      - Pull Requests
+      summary: Merge a pull request
+      description: Initiates an asynchronous merge of a pull request.
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pullId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Merge operation accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteOperationResponse'
+    get:
+      operationId: pollMergePullRequest
+      tags:
+      - Pull Requests
+      summary: Poll the status of a pull request merge
+      security:
+      - tokenAuth: []
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: database
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: pullId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: operationName
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Merge operation status.
+components:
+  schemas:
+    CreatePullRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        fromBranchOwnerName:
+          type: string
+        fromBranchRepoName:
+          type: string
+        fromBranchName:
+          type: string
+        toBranchOwnerName:
+          type: string
+        toBranchRepoName:
+          type: string
+        toBranchName:
+          type: string
+      required:
+      - title
+      - fromBranchOwnerName
+      - fromBranchRepoName
+      - fromBranchName
+      - toBranchOwnerName
+      - toBranchRepoName
+      - toBranchName
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: authorization
+      description: DoltHub API token sent as the `authorization` header in the form "token YOUR_API_TOKEN". Required for write queries and access to private databases.
