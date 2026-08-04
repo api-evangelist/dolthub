@@ -1,0 +1,26 @@
+{
+  "provider": "dolthub",
+  "sources": [
+    "dolthub-branches-api-openapi.yml",
+    "dolthub-databases-api-openapi.yml",
+    "dolthub-jobs-api-openapi.yml",
+    "dolthub-operations-api-openapi.yml",
+    "dolthub-pull-requests-api-openapi.yml",
+    "dolthub-sql-api-openapi.yml",
+    "dolthub-tags-api-openapi.yml"
+  ],
+  "outputs": [
+    "dolthub-branches-api-openapi.yml",
+    "dolthub-databases-api-openapi.yml",
+    "dolthub-jobs-api-openapi.yml",
+    "dolthub-operations-api-openapi.yml",
+    "dolthub-pull-requests-api-openapi.yml",
+    "dolthub-sql-api-openapi.yml",
+    "dolthub-tags-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
