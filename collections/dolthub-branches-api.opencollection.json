@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DoltHub Branches API",
+    "version": "v1alpha1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "authorization",
+      "value": "{{authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Branches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List branches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/branches",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List branches"
+        },
+        {
+          "info": {
+            "name": "Create a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/branches",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a branch"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,176 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DoltHub Branches SQL API",
+    "version": "v1alpha1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "authorization",
+      "value": "{{authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SQL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute a read SQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/:ref",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "Database owner name (e.g. dolthub)."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "Database (repository) name (e.g. ip-to-country)."
+              },
+              {
+                "name": "ref",
+                "value": "",
+                "type": "path",
+                "description": "Branch name, ref, or commit to query."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "The SQL query to execute (e.g. SELECT * FROM states)."
+              }
+            ]
+          },
+          "docs": "Executes a read-only SQL query (passed in the `q` query parameter) against the given database at the given branch/ref and returns the schema and result rows as JSON."
+        },
+        {
+          "info": {
+            "name": "Execute a read SQL query against the default branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "Database owner name."
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path",
+                "description": "Database (repository) name."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "The SQL query to execute."
+              }
+            ]
+          },
+          "docs": "Same as the read query endpoint but omits the branch/ref segment and runs the query against the database default branch."
+        },
+        {
+          "info": {
+            "name": "Execute an asynchronous write SQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/write/:fromBranch/:toBranch",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "fromBranch",
+                "value": "",
+                "type": "path",
+                "description": "Source branch the destination branch is based on."
+              },
+              {
+                "name": "toBranch",
+                "value": "",
+                "type": "path",
+                "description": "Destination branch the write is committed to."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "The write SQL query. An empty value merges fromBranch into toBranch."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Executes an INSERT / UPDATE / DELETE query (passed in `q`) against `toBranch`, which is created from `fromBranch` if it does not exist. An empty query merges `fromBranch` into `toBranch`. Returns an `operation_name` to poll. Requires authentication."
+        },
+        {
+          "info": {
+            "name": "Poll the status of a write operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/write",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operationName",
+                "value": "",
+                "type": "query",
+                "description": "Operation name returned by the write endpoint."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Polls the status of a previously submitted write operation using the `operationName` returned by the write endpoint. Poll until `done` is true."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

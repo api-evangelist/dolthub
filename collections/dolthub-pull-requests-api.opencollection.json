@@ -1,0 +1,170 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DoltHub Branches Pull Requests API",
+    "version": "v1alpha1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "authorization",
+      "value": "{{authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pull Requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a pull request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/pulls",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a pull request"
+        },
+        {
+          "info": {
+            "name": "Add a comment to a pull request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/pulls/:pullId/comments",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pullId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a comment to a pull request"
+        },
+        {
+          "info": {
+            "name": "Poll the status of a pull request merge",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/pulls/:pullId/merge",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pullId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operationName",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Poll the status of a pull request merge"
+        },
+        {
+          "info": {
+            "name": "Merge a pull request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/pulls/:pullId/merge",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pullId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Initiates an asynchronous merge of a pull request."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

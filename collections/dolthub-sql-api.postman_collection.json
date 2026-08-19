@@ -1,0 +1,621 @@
+{
+  "item": [
+    {
+      "id": "373ac9dd-9f6f-4a4b-be3e-45491f6dba56",
+      "name": "SQL",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9c91adba-7b55-48ce-9960-54f1f5ac5cd0",
+          "name": "Execute a read SQL query",
+          "request": {
+            "name": "Execute a read SQL query",
+            "description": {
+              "content": "Executes a read-only SQL query (passed in the `q` query parameter) against the given database at the given branch/ref and returns the schema and result rows as JSON.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":owner",
+                ":database",
+                ":ref"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "(Required) The SQL query to execute (e.g. SELECT * FROM states)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "owner",
+                  "description": "(Required) Database owner name (e.g. dolthub)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "database",
+                  "description": "(Required) Database (repository) name (e.g. ip-to-country)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ref",
+                  "description": "(Required) Branch name, ref, or commit to query."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3abcaf36-ea33-408d-a22f-c4e1557d8b71",
+              "name": "Query result with schema and rows.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":owner",
+                    ":database",
+                    ":ref"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) Database owner name (e.g. dolthub)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "database",
+                      "description": "(Required) Database (repository) name (e.g. ip-to-country)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ref",
+                      "description": "(Required) Branch name, ref, or commit to query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"query_execution_status\": \"string\",\n  \"query_execution_message\": \"string\",\n  \"repository_owner\": \"string\",\n  \"repository_name\": \"string\",\n  \"commit_ref\": \"string\",\n  \"sql_query\": \"string\",\n  \"schema\": [\n    {\n      \"columnName\": \"string\",\n      \"columnType\": \"string\"\n    },\n    {\n      \"columnName\": \"string\",\n      \"columnType\": \"string\"\n    }\n  ],\n  \"rows\": [\n    {\n      \"key_0\": true,\n      \"key_1\": 3059,\n      \"key_2\": 2955.2397815051822,\n      \"key_3\": false\n    },\n    {\n      \"key_0\": \"string\",\n      \"key_1\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af206398-217d-4420-901c-5ddf332ad49d",
+          "name": "Execute a read SQL query against the default branch",
+          "request": {
+            "name": "Execute a read SQL query against the default branch",
+            "description": {
+              "content": "Same as the read query endpoint but omits the branch/ref segment and runs the query against the database default branch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":owner",
+                ":database"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "(Required) The SQL query to execute."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "owner",
+                  "description": "(Required) Database owner name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "database",
+                  "description": "(Required) Database (repository) name."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9a050503-aa4b-4983-b955-1312e6dc0353",
+              "name": "Query result with schema and rows.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":owner",
+                    ":database"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) Database owner name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "database",
+                      "description": "(Required) Database (repository) name."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"query_execution_status\": \"string\",\n  \"query_execution_message\": \"string\",\n  \"repository_owner\": \"string\",\n  \"repository_name\": \"string\",\n  \"commit_ref\": \"string\",\n  \"sql_query\": \"string\",\n  \"schema\": [\n    {\n      \"columnName\": \"string\",\n      \"columnType\": \"string\"\n    },\n    {\n      \"columnName\": \"string\",\n      \"columnType\": \"string\"\n    }\n  ],\n  \"rows\": [\n    {\n      \"key_0\": 2228.5455612148453,\n      \"key_1\": false,\n      \"key_2\": 9959.762729026717\n    },\n    {\n      \"key_0\": 4366.4844369354105,\n      \"key_1\": true,\n      \"key_2\": 9202\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b467ecb0-665f-4142-a350-74b436c761c6",
+          "name": "Execute an asynchronous write SQL query",
+          "request": {
+            "name": "Execute an asynchronous write SQL query",
+            "description": {
+              "content": "Executes an INSERT / UPDATE / DELETE query (passed in `q`) against `toBranch`, which is created from `fromBranch` if it does not exist. An empty query merges `fromBranch` into `toBranch`. Returns an `operation_name` to poll. Requires authentication.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":owner",
+                ":database",
+                "write",
+                ":fromBranch",
+                ":toBranch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "The write SQL query. An empty value merges fromBranch into toBranch."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "owner",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "database",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fromBranch",
+                  "description": "(Required) Source branch the destination branch is based on."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "toBranch",
+                  "description": "(Required) Destination branch the write is committed to."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0bba2b99-9e2a-4e8c-8717-31b9ce398e9c",
+              "name": "Asynchronous operation accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":owner",
+                    ":database",
+                    "write",
+                    ":fromBranch",
+                    ":toBranch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "database",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fromBranch",
+                      "description": "(Required) Source branch the destination branch is based on."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "toBranch",
+                      "description": "(Required) Destination branch the write is committed to."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"operation_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5789192b-0111-4583-98f3-59353fbd0756",
+          "name": "Poll the status of a write operation",
+          "request": {
+            "name": "Poll the status of a write operation",
+            "description": {
+              "content": "Polls the status of a previously submitted write operation using the `operationName` returned by the write endpoint. Poll until `done` is true.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":owner",
+                ":database",
+                "write"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "operationName",
+                  "value": "<string>",
+                  "description": "(Required) Operation name returned by the write endpoint."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "owner",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "database",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9c7a970b-6d01-479c-b58e-3be772695f9e",
+              "name": "Operation status, including commit IDs when done.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":owner",
+                    ":database",
+                    "write"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "operationName",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "database",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"done\": false,\n  \"res_details\": {\n    \"from_commit_id\": \"string\",\n    \"to_commit_id\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.dolthub.com/api/v1alpha1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4f854e75-2dd3-4c49-9c92-247a712c0880",
+    "name": "DoltHub Branches SQL API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database \"Git for data\". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.\n\nContact Support:\n Name: DoltHub Support",
+      "type": "text/plain"
+    }
+  }
+}

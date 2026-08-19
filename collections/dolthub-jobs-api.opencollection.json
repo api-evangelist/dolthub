@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DoltHub Branches Jobs API",
+    "version": "v1alpha1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "authorization",
+      "value": "{{authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List jobs for a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/jobs",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List jobs for a database"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

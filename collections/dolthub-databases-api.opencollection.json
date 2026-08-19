@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DoltHub Branches Databases API",
+    "version": "v1alpha1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "authorization",
+      "value": "{{authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Databases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/database",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates a new Dolt database (repository) owned by the given owner."
+        },
+        {
+          "info": {
+            "name": "Poll the status of a fork operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/fork",
+            "params": [
+              {
+                "name": "operationName",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Poll the status of a fork operation"
+        },
+        {
+          "info": {
+            "name": "Fork a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.dolthub.com/api/v1alpha1/fork",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "authorization",
+              "value": "{{authorization}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Forks a parent database into a new owner namespace. Asynchronous; returns an operation name to poll via GET /fork."
+        },
+        {
+          "info": {
+            "name": "List forks of a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.dolthub.com/api/v1alpha1/:owner/:database/forks",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List forks of a database"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
