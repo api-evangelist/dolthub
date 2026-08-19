@@ -30,7 +30,7 @@ tags:
 - MySQL
 created: '2026-06-20'
 modified: '2026-06-20'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: dolthub:dolt-sql-server
   name: Dolt SQL Server
