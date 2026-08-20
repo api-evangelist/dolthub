@@ -104,6 +104,8 @@ apis:
   humanURL: https://docs.dolthub.com/products/dolthub/api/sql
   baseURL: https://www.dolthub.com/api/v1alpha1
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -127,7 +129,8 @@ apis:
   description: The Operations API from DoltHub — 1 operation(s) for operations.
   humanURL: https://docs.dolthub.com/products/dolthub/api/sql
   baseURL: https://www.dolthub.com/api/v1alpha1
-  tags:
+  tags: []
+  tags_raw:
   - Operations
   properties:
   - type: OpenAPI
