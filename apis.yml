@@ -94,6 +94,8 @@ apis:
   humanURL: https://docs.dolthub.com/products/dolthub/api/sql
   baseURL: https://www.dolthub.com/api/v1alpha1
   tags:
+  - Database
+  tags_raw:
   - Databases
   properties:
   - type: OpenAPI
