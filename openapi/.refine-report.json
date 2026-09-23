@@ -1,13 +1,7 @@
 {
   "provider": "dolthub",
   "sources": [
-    "dolthub-branches-api-openapi.yml",
-    "dolthub-databases-api-openapi.yml",
-    "dolthub-jobs-api-openapi.yml",
-    "dolthub-operations-api-openapi.yml",
-    "dolthub-pull-requests-api-openapi.yml",
-    "dolthub-sql-api-openapi.yml",
-    "dolthub-tags-api-openapi.yml"
+    "_original/dolthub-openapi.yml"
   ],
   "outputs": [
     "dolthub-branches-api-openapi.yml",
@@ -21,6 +15,25 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "dolthub-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "dolthub-openapi.yml: declared missing tag: Branches",
+    "dolthub-openapi.yml: declared missing tag: Databases",
+    "dolthub-openapi.yml: declared missing tag: Jobs",
+    "dolthub-openapi.yml: declared missing tag: Operations",
+    "dolthub-openapi.yml: declared missing tag: Pull Requests",
+    "dolthub-openapi.yml: declared missing tag: SQL",
+    "dolthub-openapi.yml: declared missing tag: Tags",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "dolthub-branches-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dolthub-databases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dolthub-jobs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dolthub-operations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dolthub-pull-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dolthub-sql-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dolthub-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

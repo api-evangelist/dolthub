@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: DoltHub Branches SQL API
+  title: DoltHub SQL API
   description: The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database "Git for data". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.
   termsOfService: https://www.dolthub.com/terms
   contact:
@@ -13,13 +13,13 @@ security:
 - tokenAuth: []
 - {}
 tags:
-- name: SQL
+- name: sql
 paths:
   /{owner}/{database}/{ref}:
     get:
       operationId: executeReadQuery
       tags:
-      - SQL
+      - sql
       summary: Execute a read SQL query
       description: Executes a read-only SQL query (passed in the `q` query parameter) against the given database at the given branch/ref and returns the schema and result rows as JSON.
       parameters:
@@ -58,7 +58,7 @@ paths:
     get:
       operationId: executeReadQueryDefaultBranch
       tags:
-      - SQL
+      - sql
       summary: Execute a read SQL query against the default branch
       description: Same as the read query endpoint but omits the branch/ref segment and runs the query against the database default branch.
       parameters:
@@ -91,7 +91,7 @@ paths:
     post:
       operationId: executeWriteQuery
       tags:
-      - SQL
+      - sql
       summary: Execute an asynchronous write SQL query
       description: Executes an INSERT / UPDATE / DELETE query (passed in `q`) against `toBranch`, which is created from `fromBranch` if it does not exist. An empty query merges `fromBranch` into `toBranch`. Returns an `operation_name` to poll. Requires authentication.
       security:
@@ -136,7 +136,7 @@ paths:
     get:
       operationId: pollWriteOperation
       tags:
-      - SQL
+      - sql
       summary: Poll the status of a write operation
       description: Polls the status of a previously submitted write operation using the `operationName` returned by the write endpoint. Poll until `done` is true.
       security:
@@ -167,18 +167,11 @@ paths:
                 $ref: '#/components/schemas/WriteStatusResponse'
 components:
   schemas:
-    WriteStatusResponse:
+    WriteOperationResponse:
       type: object
       properties:
-        done:
-          type: boolean
-        res_details:
-          type: object
-          properties:
-            from_commit_id:
-              type: string
-            to_commit_id:
-              type: string
+        operation_name:
+          type: string
     QueryResponse:
       type: object
       properties:
@@ -208,11 +201,18 @@ components:
           items:
             type: object
             additionalProperties: true
-    WriteOperationResponse:
+    WriteStatusResponse:
       type: object
       properties:
-        operation_name:
-          type: string
+        done:
+          type: boolean
+        res_details:
+          type: object
+          properties:
+            from_commit_id:
+              type: string
+            to_commit_id:
+              type: string
   securitySchemes:
     tokenAuth:
       type: apiKey

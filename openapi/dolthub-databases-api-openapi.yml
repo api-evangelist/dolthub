@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: DoltHub Branches Databases API
+  title: DoltHub Databases API
   description: The DoltHub HTTP API (v1alpha1) for the version-controlled SQL database "Git for data". Provides read SQL queries, asynchronous write SQL queries, and version-control management of databases, branches, tags, forks, jobs, and operations on Dolt databases hosted at dolthub.com. Read queries against public databases are unauthenticated; write queries and access to private databases require an API token sent as an authorization header.
   termsOfService: https://www.dolthub.com/terms
   contact:
@@ -93,6 +93,11 @@ paths:
           description: List of forks in the network.
 components:
   schemas:
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
     ForkDatabaseRequest:
       type: object
       properties:
@@ -124,11 +129,6 @@ components:
       - ownerName
       - repoName
       - visibility
-    WriteOperationResponse:
-      type: object
-      properties:
-        operation_name:
-          type: string
   securitySchemes:
     tokenAuth:
       type: apiKey
