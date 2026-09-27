@@ -172,6 +172,18 @@ components:
       properties:
         operation_name:
           type: string
+    WriteStatusResponse:
+      type: object
+      properties:
+        done:
+          type: boolean
+        res_details:
+          type: object
+          properties:
+            from_commit_id:
+              type: string
+            to_commit_id:
+              type: string
     QueryResponse:
       type: object
       properties:
@@ -201,18 +213,6 @@ components:
           items:
             type: object
             additionalProperties: true
-    WriteStatusResponse:
-      type: object
-      properties:
-        done:
-          type: boolean
-        res_details:
-          type: object
-          properties:
-            from_commit_id:
-              type: string
-            to_commit_id:
-              type: string
   securitySchemes:
     tokenAuth:
       type: apiKey

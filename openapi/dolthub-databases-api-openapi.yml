@@ -98,19 +98,6 @@ components:
       properties:
         operation_name:
           type: string
-    ForkDatabaseRequest:
-      type: object
-      properties:
-        parentOwnerName:
-          type: string
-        parentDatabaseName:
-          type: string
-        ownerName:
-          type: string
-      required:
-      - parentOwnerName
-      - parentDatabaseName
-      - ownerName
     CreateDatabaseRequest:
       type: object
       properties:
@@ -129,6 +116,19 @@ components:
       - ownerName
       - repoName
       - visibility
+    ForkDatabaseRequest:
+      type: object
+      properties:
+        parentOwnerName:
+          type: string
+        parentDatabaseName:
+          type: string
+        ownerName:
+          type: string
+      required:
+      - parentOwnerName
+      - parentDatabaseName
+      - ownerName
   securitySchemes:
     tokenAuth:
       type: apiKey
