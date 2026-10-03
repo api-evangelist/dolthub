@@ -167,11 +167,6 @@ paths:
                 $ref: '#/components/schemas/WriteStatusResponse'
 components:
   schemas:
-    WriteOperationResponse:
-      type: object
-      properties:
-        operation_name:
-          type: string
     WriteStatusResponse:
       type: object
       properties:
@@ -213,6 +208,11 @@ components:
           items:
             type: object
             additionalProperties: true
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
   securitySchemes:
     tokenAuth:
       type: apiKey

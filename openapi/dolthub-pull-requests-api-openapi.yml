@@ -146,11 +146,6 @@ paths:
           description: Merge operation status.
 components:
   schemas:
-    WriteOperationResponse:
-      type: object
-      properties:
-        operation_name:
-          type: string
     CreatePullRequest:
       type: object
       properties:
@@ -178,6 +173,11 @@ components:
       - toBranchOwnerName
       - toBranchRepoName
       - toBranchName
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
   securitySchemes:
     tokenAuth:
       type: apiKey
