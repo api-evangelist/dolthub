@@ -93,11 +93,6 @@ paths:
           description: List of forks in the network.
 components:
   schemas:
-    WriteOperationResponse:
-      type: object
-      properties:
-        operation_name:
-          type: string
     CreateDatabaseRequest:
       type: object
       properties:
@@ -129,6 +124,11 @@ components:
       - parentOwnerName
       - parentDatabaseName
       - ownerName
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
   securitySchemes:
     tokenAuth:
       type: apiKey
