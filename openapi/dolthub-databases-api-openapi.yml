@@ -93,24 +93,6 @@ paths:
           description: List of forks in the network.
 components:
   schemas:
-    CreateDatabaseRequest:
-      type: object
-      properties:
-        ownerName:
-          type: string
-        repoName:
-          type: string
-        visibility:
-          type: string
-          enum:
-          - public
-          - private
-        description:
-          type: string
-      required:
-      - ownerName
-      - repoName
-      - visibility
     ForkDatabaseRequest:
       type: object
       properties:
@@ -129,6 +111,24 @@ components:
       properties:
         operation_name:
           type: string
+    CreateDatabaseRequest:
+      type: object
+      properties:
+        ownerName:
+          type: string
+        repoName:
+          type: string
+        visibility:
+          type: string
+          enum:
+          - public
+          - private
+        description:
+          type: string
+      required:
+      - ownerName
+      - repoName
+      - visibility
   securitySchemes:
     tokenAuth:
       type: apiKey

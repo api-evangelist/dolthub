@@ -179,11 +179,6 @@ components:
               type: string
             to_commit_id:
               type: string
-    WriteOperationResponse:
-      type: object
-      properties:
-        operation_name:
-          type: string
     QueryResponse:
       type: object
       properties:
@@ -213,6 +208,11 @@ components:
           items:
             type: object
             additionalProperties: true
+    WriteOperationResponse:
+      type: object
+      properties:
+        operation_name:
+          type: string
   securitySchemes:
     tokenAuth:
       type: apiKey
