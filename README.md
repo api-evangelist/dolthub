@@ -1,4 +1,4 @@
-# DoltHub (dolthub)
+# DoltHub
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,116 +66,129 @@
 
 DoltHub is the hosting platform for Dolt, the version-controlled SQL database - "Git for data". DoltHub hosts public and private Dolt databases and exposes an HTTP API (the DoltHub SQL API) for running read and write SQL queries against any branch, plus repository, branch, tag, fork, and asynchronous job/operation management over a Git-style version-controlled MySQL-compatible database.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/dolthub/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/dolthub/refs/heads/main/apis.yml)
+**Areas:** Database · SQL · Version Control · Git for Data · MySQL · Developer Tools
 
-## Tags
+## DoltHub on APIs.io
 
-- Database
-- SQL
-- Version Control
-- Git for Data
-- MySQL
+Everything profiled for DoltHub is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/dolthub/](https://apis.io/providers/dolthub/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (8)
 
-- **Created:** 2026-06-20
-- **Modified:** 2026-06-20
+- [Dolt SQL Server](https://apis.io/apis/dolthub/dolt-sql-server/) — The open-source Dolt database ships a MySQL-compatible SQL server (dolt sql-server) over the MySQL wire protocol, giving the same versioned database hosted…
+- [DoltHub Branches API](https://apis.io/apis/dolthub/dolthub-branches-api/) — The Branches API from DoltHub — 1 operation(s) for branches.
+- [DoltHub Databases API](https://apis.io/apis/dolthub/dolthub-databases-api/) — The Databases API from DoltHub — 3 operation(s) for databases.
+- [DoltHub Jobs API](https://apis.io/apis/dolthub/dolthub-jobs-api/) — The Jobs API from DoltHub — 1 operation(s) for jobs.
+- [DoltHub Operations API](https://apis.io/apis/dolthub/dolthub-operations-api/) — The Operations API from DoltHub — 1 operation(s) for operations.
+- [DoltHub Pull Requests API](https://apis.io/apis/dolthub/dolthub-pull-requests-api/) — The Pull Requests API from DoltHub — 3 operation(s) for pull requests.
+- [DoltHub SQL API](https://apis.io/apis/dolthub/dolthub-sql-api/) — The SQL API from DoltHub — 4 operation(s) for sql.
+- [DoltHub Tags API](https://apis.io/apis/dolthub/dolthub-tags-api/) — The Tags API from DoltHub — 1 operation(s) for tags.
 
-## APIs
+### Published properties
 
-### DoltHub SQL Query API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Read-only SQL query endpoint that executes a SELECT (or other read) query against any owner/database/branch on DoltHub and returns a JSON response containing the schema, rows, and query execution status.
+#### Agentic access (1)
 
-- **Human URL:** [https://docs.dolthub.com/products/dolthub/api/sql](https://docs.dolthub.com/products/dolthub/api/sql)
-- **Base URL:** `https://www.dolthub.com/api/v1alpha1`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Dolthub Agentic Access](https://apis.io/agentic-access/dolthub/dolthub-agentic-access/)
 
-- SQL
-- Query
-- Read
+#### Collections (8)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://docs.dolthub.com/products/dolthub/api/sql)
-- [API Reference](https://docs.dolthub.com/products/dolthub/api/sql)
-- [OpenAPI](openapi/dolthub-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/dolthub.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [GitHub](https://github.com/dolthub/dolt)
+- [DoltHub API](https://apis.io/collections/dolthub/open-dolthub/)
+- [DoltHub Branches API](https://apis.io/collections/dolthub/open-dolthub-branches-api/)
+- [DoltHub Branches Databases API](https://apis.io/collections/dolthub/open-dolthub-databases-api/)
+- [DoltHub Branches Jobs API](https://apis.io/collections/dolthub/open-dolthub-jobs-api/)
+- [DoltHub Branches Operations API](https://apis.io/collections/dolthub/open-dolthub-operations-api/)
+- [DoltHub Branches Pull Requests API](https://apis.io/collections/dolthub/open-dolthub-pull-requests-api/)
+- [DoltHub Branches SQL API](https://apis.io/collections/dolthub/open-dolthub-sql-api/)
+- [DoltHub Branches Tags API](https://apis.io/collections/dolthub/open-dolthub-tags-api/)
 
-### DoltHub Write API
+#### Security (2)
 
-Asynchronous write endpoint that executes INSERT / UPDATE / DELETE SQL against a destination branch (created from a source branch if missing) and returns an operation name to poll for completion and the resulting commit IDs. Requires a Bearer / token authorization header.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://docs.dolthub.com/products/dolthub/api/sql](https://docs.dolthub.com/products/dolthub/api/sql)
-- **Base URL:** `https://www.dolthub.com/api/v1alpha1`
+- [Dolthub Authentication](https://apis.io/security/dolthub/dolthub-authentication/)
+- [Dolthub Domain Security](https://apis.io/security/dolthub/dolthub-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- SQL
-- Write
-- Async
+Published plans, tiers and prices.
 
-#### Properties
+- [Dolthub Plans Pricing](https://apis.io/plans/dolthub/dolthub-plans-pricing/)
 
-- [Documentation](https://docs.dolthub.com/products/dolthub/api/sql)
-- [API Reference](https://www.dolthub.com/blog/2022-01-12-sql-api-writes/)
-- [OpenAPI](openapi/dolthub-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/dolthub.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [GitHub](https://github.com/dolthub/dolt)
+#### Rate limits (1)
 
-### DoltHub Repositories and Branches API
+Published request limits.
 
-Version-control management endpoints for creating databases, forking databases, listing forks, creating and listing branches and tags, and polling asynchronous jobs and operations on a Dolt database.
+- [Dolthub Rate Limits](https://apis.io/rate-limits/dolthub/dolthub-rate-limits/)
 
-- **Human URL:** [https://docs.dolthub.com/products/dolthub/api/database](https://docs.dolthub.com/products/dolthub/api/database)
-- **Base URL:** `https://www.dolthub.com/api/v1alpha1`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Repositories
-- Branches
-- Tags
-- Forks
+- [Dolthub Finops](https://apis.io/finops/dolthub/dolthub-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://docs.dolthub.com/products/dolthub/api/database)
-- [API Reference](https://www.dolthub.com/blog/2023-02-24-introducing-the-new-dolthub-api/)
-- [OpenAPI](openapi/dolthub-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/dolthub.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [GitHub](https://github.com/dolthub/dolt)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Dolt SQL Server
-
-The open-source Dolt database ships a MySQL-compatible SQL server (dolt sql-server) over the MySQL wire protocol, giving the same versioned database hosted on DoltHub a self-hostable, drop-in SQL interface for any MySQL client or driver.
-
-- **Human URL:** [https://docs.dolthub.com/sql-reference/server/sql-server](https://docs.dolthub.com/sql-reference/server/sql-server)
-- **Base URL:** `https://github.com/dolthub/dolt`
-
-#### Tags
-
-- Dolt
-- MySQL
-- SQL Server
-
-#### Properties
-
-- [Documentation](https://docs.dolthub.com/sql-reference/server/sql-server)
-- [GitHub](https://github.com/dolthub/dolt)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/dolthub)
-- [LinkedIn](https://www.linkedin.com/company/dolthub)
 - [Website](https://www.dolthub.com)
 - [Documentation](https://docs.dolthub.com)
-- [Plans](plans/dolthub-plans-pricing.yml)
-- [Rate Limits](rate-limits/dolthub-rate-limits.yml)
-- [Fin Ops](finops/dolthub-finops.yml)
+- [Blog](https://www.dolthub.com/blog/rss.xml)
+- [GitHub](https://github.com/dolthub)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 26.5** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 44.6 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 32.1 |
+| Access clarity | 5.3 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/dolthub/](https://apis.io/providers/dolthub/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for DoltHub: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/dolthub/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
